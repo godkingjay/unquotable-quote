@@ -2,13 +2,34 @@ import NextLink from 'next/link';
 
 import { button as buttonStyles } from '@nextui-org/theme';
 import { cn } from '@/lib';
+import { textStyles } from '@/styles';
 
 export default function Home() {
 	return (
 		<section className='flex flex-col items-center justify-center gap-4 py-8 md:py-10'>
 			<div className='inline-block max-w-lg text-center justify-center'>
-				<h1>A NextJS Template</h1>
-				<h3 className='font-normal text-default-500'>Subtitle</h3>
+				<h1
+					className={cn(
+						'font-semibold',
+						textStyles({
+							color: 'gradient-violet',
+							size: '4xl',
+						})
+					)}
+				>
+					Unquotable Quote
+				</h1>
+				<br />
+				<h2
+					className={cn(
+						textStyles({
+							size: 'md',
+						}),
+						'inline-block mt-2 text-foreground-500'
+					)}
+				>
+					Decrypt the Quote
+				</h2>
 			</div>
 
 			<div className='flex gap-3'>
