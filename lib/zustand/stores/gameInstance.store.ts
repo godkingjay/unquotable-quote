@@ -58,7 +58,8 @@ export const useGameInstanceStore = create<GameInstanceStoreState & GameInstance
 		let currentCharacterIndex = 0;
 		let currentFieldIndex = 0;
 
-		const fields: GameQuoteFieldWordType[] =
+		let fields: GameQuoteFieldWordType[] = [];
+		fields =
 			game.text?.split(' ').map((word, index) => {
 				const fieldWord: GameQuoteFieldWordType = {
 					index,
