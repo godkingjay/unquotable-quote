@@ -6,7 +6,7 @@ type GameInstanceInitOptions = {
 	life?: number;
 };
 
-type GameInstanceStoreState = Omit<EncryptedQuoteType, ''> & {
+type GameInstanceStoreState = EncryptedQuoteType & {
 	life: number;
 	maxLife: number;
 	options: GameInstanceInitOptions;
@@ -154,8 +154,13 @@ export const useGameInstanceStore = create<GameInstanceStoreState & GameInstance
 				};
 			});
 
+			let inputs: Record<string, string> = state.inputs;
+
+			inputs[letter] = value;
+
 			return {
 				fields,
+				inputs,
 			};
 		}),
 	checkDecryptedText: () => {
@@ -192,6 +197,8 @@ export const useGameInstanceStore = create<GameInstanceStoreState & GameInstance
 					}),
 				};
 			});
+
+			console.log(state.inputs);
 
 			return {
 				fields,

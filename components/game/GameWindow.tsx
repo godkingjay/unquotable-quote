@@ -35,7 +35,7 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>((props, ref
 
 	const newGame = React.useCallback(() => {
 		refetch();
-	}, []);
+	}, [refetch]);
 
 	const renderCharacterField = (character: GameQuoteFieldCharacterType) => {
 		switch (character.type) {
@@ -50,8 +50,6 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>((props, ref
 							variant='underlined'
 							max={1}
 							maxLength={1}
-							aria-error={character.isError}
-							aria-correct={character.isCorrect}
 							isDisabled={character.isCorrect}
 							isInvalid={character.isError}
 							className={cn('h-10 text-inherit w-[120%]', {

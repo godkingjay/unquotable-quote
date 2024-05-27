@@ -1,9 +1,6 @@
-import dynamic from 'next/dynamic';
 import React from 'react';
 
-const GameWindow = dynamic(() => import('@/components/game').then((mod) => mod.GameWindow), {
-	loading: () => <></>,
-});
+import { GameWindow } from '@/components/game';
 
 const Game = () => {
 	return (
