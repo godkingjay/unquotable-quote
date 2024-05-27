@@ -16,6 +16,7 @@ type GameInstanceStoreState = Omit<EncryptedQuoteType, ''> & {
 	length: number;
 	fields: GameQuoteFieldWordType[];
 	inputs: {};
+	isSolved: false;
 };
 
 type GameInstanceStoreActions = {
@@ -42,6 +43,7 @@ const defaultGameInstance: GameInstanceStoreState = {
 	length: 0,
 	fields: [],
 	inputs: {},
+	isSolved: false,
 };
 
 export const useGameInstanceStore = create<GameInstanceStoreState & GameInstanceStoreActions>((set) => ({
