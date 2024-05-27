@@ -15,8 +15,10 @@ type GameInstanceStoreState = EncryptedQuoteType & {
 	count: number;
 	length: number;
 	fields: GameQuoteFieldWordType[];
-	inputs: {};
-	isSolved: false;
+	inputs: Record<string, string>;
+	isSolved: boolean;
+	isLost: boolean;
+	isGameOver: boolean;
 };
 
 type GameInstanceStoreActions = {
@@ -44,6 +46,8 @@ const defaultGameInstance: GameInstanceStoreState = {
 	fields: [],
 	inputs: {},
 	isSolved: false,
+	isLost: false,
+	isGameOver: false,
 };
 
 export const useGameInstanceStore = create<GameInstanceStoreState & GameInstanceStoreActions>((set) => ({
@@ -99,8 +103,6 @@ export const useGameInstanceStore = create<GameInstanceStoreState & GameInstance
 
 				return fieldWord;
 			}) ?? [];
-
-		fields.pop();
 
 		const decryptedText = game?.text
 			?.split('')
@@ -198,11 +200,23 @@ export const useGameInstanceStore = create<GameInstanceStoreState & GameInstance
 				};
 			});
 
-			console.log(state.inputs);
+			let isSolved = true;
+			let isLost = hasError && state.life - 1 <= 0 ? true : false;
+
+			Object.keys(state.inputs).forEach((key: string) => {
+				if (state.map[key] !== state.inputs[key as string]) {
+					isSolved = false;
+				}
+			});
+
+			const isGameOver = isLost || isSolved;
 
 			return {
 				fields,
 				life: hasError ? state.life - 1 : state.life,
+				isSolved,
+				isLost,
+				isGameOver,
 			};
 		});
 	},

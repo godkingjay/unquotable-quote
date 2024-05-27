@@ -109,7 +109,7 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>((props, ref
 							}}
 						/>
 						<p
-							className={cn({
+							className={cn('opacity-75', {
 								'opacity-50': character.isCorrect,
 							})}
 						>
