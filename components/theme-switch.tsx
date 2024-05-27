@@ -27,7 +27,7 @@ export const ThemeSwitch = ({ className, classNames }: ThemeSwitchProps) => {
 	});
 
 	return (
-		<div
+		<button
 			{...getWrapperProps()}
 			onClick={onChange}
 			className={slots.wrapper({
@@ -49,6 +49,6 @@ export const ThemeSwitch = ({ className, classNames }: ThemeSwitchProps) => {
 			})}
 		>
 			{!isSelected || isSSR ? <SunFilledIcon size={22} /> : <MoonFilledIcon size={22} />}
-		</div>
+		</button>
 	);
 };

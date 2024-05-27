@@ -112,7 +112,8 @@ export const useGameInstanceStore = create<GameInstanceStoreState & GameInstance
 			})
 			.join('');
 
-		const inputs = Object.keys(reversedMap).reduce((acc: Record<string, string>, key) => {
+		let inputs = {};
+		inputs = Object.keys(reversedMap).reduce((acc: Record<string, string>, key) => {
 			acc[key] = '';
 			return acc;
 		}, {});
