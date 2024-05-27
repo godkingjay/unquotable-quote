@@ -1,5 +1,5 @@
 import { quotes } from '@/lib/globals';
-import { formatUpperCase } from '@/lib/utils/format';
+import { formatUpperCase } from '@/lib/utils';
 
 export async function GET() {
 	const randomIndex = Math.floor(Math.random() * quotes.quotes.length);
@@ -26,6 +26,12 @@ export async function GET() {
 			return map.get(letter) || letter;
 		})
 		.join('');
+
+	for (const letter of alphabet) {
+		if (!randomQuote.text.includes(letter)) {
+			map.delete(letter);
+		}
+	}
 
 	randomQuote.text = encryptedQuote;
 	randomQuote.map = Object.fromEntries(map);
