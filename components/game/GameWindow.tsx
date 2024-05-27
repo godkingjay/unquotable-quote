@@ -86,13 +86,8 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>((props, ref
 											) as HTMLInputElement;
 										};
 
-										let currentIndex = character.fieldIndex - 1;
-										let previousCharacter: HTMLInputElement | null = null;
+										const previousCharacter = getPreviousCharacterField(character.fieldIndex);
 
-										while (!previousCharacter && currentIndex > 0) {
-											previousCharacter = getPreviousCharacterField(currentIndex);
-											currentIndex -= 1;
-										}
 										if (previousCharacter) {
 											previousCharacter?.focus();
 										}
@@ -105,13 +100,8 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>((props, ref
 											) as HTMLInputElement;
 										};
 
-										let currentIndex = character.fieldIndex + 1;
-										let nextCharacter: HTMLInputElement | null = null;
+										const nextCharacter = getNextCharacterField(character.fieldIndex);
 
-										while (!nextCharacter && currentIndex < game.fieldsCount) {
-											nextCharacter = getNextCharacterField(currentIndex);
-											currentIndex += 1;
-										}
 										if (nextCharacter) {
 											nextCharacter?.focus();
 										}
