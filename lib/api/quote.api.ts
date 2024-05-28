@@ -10,7 +10,7 @@ export const getEncryptedQuote = async ({
     try {
         const url = `/quotes?dt=${new Date().toISOString()}`;
 
-        const response = await axiosClient.get(url, {
+        const response = await axiosClient.post(url, {
             signal: controller?.signal,
         });
 
