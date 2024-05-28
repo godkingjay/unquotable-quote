@@ -27,10 +27,6 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
         const { getEncryptedQuoteQuery } = useQuotes({
             onGetEncryptedQuote(data) {
                 setIsLoading(true);
-                toast.loading("Getting encrypted quote...", {
-                    id: "get-encrypted-quote",
-                    position: "top-center",
-                });
             },
             onGetEncryptedQuoteSuccess: (response) => {
                 game.init(response.data, game.options);
