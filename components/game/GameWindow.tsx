@@ -32,7 +32,7 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
 
                 return response.data;
             },
-            gcTime: 0,
+            gcTime: Infinity,
             refetchOnWindowFocus: false,
         });
 
