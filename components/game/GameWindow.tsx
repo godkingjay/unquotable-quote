@@ -3,18 +3,17 @@
 import React from "react";
 
 import { cn, formatUpperCase } from "@/lib";
-import { API } from "@/lib/api";
 import { useGameInstanceStore } from "@/lib/zustand";
 import { GameQuoteFieldCharacterType, GameQuoteFieldWordType } from "@/types";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody } from "@nextui-org/card";
 import { Input } from "@nextui-org/input";
 import { Spinner } from "@nextui-org/spinner";
-import { useQuery } from "@tanstack/react-query";
 
 import { HeartFilledIcon } from "../icons";
 import { GameOverModal } from "../modal";
 import useQuotes from "@/hooks/api/useQuotes";
+import toast from "react-hot-toast";
 
 type GameWindowProps = {};
 
@@ -28,12 +27,22 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
         const { getEncryptedQuoteQuery } = useQuotes({
             onGetEncryptedQuote(data) {
                 setIsLoading(true);
+                toast.loading("Getting encrypted quote...", {
+                    id: "get-encrypted-quote",
+                    position: "top-center",
+                });
             },
             onGetEncryptedQuoteSuccess: (response) => {
                 game.init(response.data, game.options);
+                toast.dismiss("get-encrypted-quote");
                 setIsLoading(false);
             },
             onGetEncryptedQuoteError(error) {
+                toast.error(error.message, {
+                    id: "get-encrypted-quote",
+                    duration: 2000,
+                    position: "top-center",
+                });
                 setIsLoading(false);
             },
         });
