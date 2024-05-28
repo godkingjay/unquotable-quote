@@ -17,6 +17,7 @@
 		"@nextui-org/link": "^2.0.29",
 		"@nextui-org/modal": "^2.0.34",
 		"@nextui-org/navbar": "^2.0.30",
+		"@nextui-org/skeleton": "^2.0.28",
 		"@nextui-org/snippet": "^2.0.35",
 		"@nextui-org/spinner": "^2.0.28",
 		"@nextui-org/switch": "^2.0.28",

@@ -430,6 +430,14 @@
   resolved "https://registry.yarnpkg.com/@nextui-org/shared-utils/-/shared-utils-2.0.5.tgz#f04072240f35b0a5748fe38b4ec1c285231d6074"
   integrity sha512-aFc/CUL8RVfBh0IotIpxkpKjyUPc/zJaMJd5pRCQA1kIpKLdSrlh3//MLYMaP/fo/NQtE3DPeXqfKhHRr1fkEw==
 
+"@nextui-org/skeleton@^2.0.28":
+  version "2.0.28"
+  resolved "https://registry.yarnpkg.com/@nextui-org/skeleton/-/skeleton-2.0.28.tgz#82b76c7fe9926bec48530839f37550dfbe700967"
+  integrity sha512-Xt1m+Y1RPRDupSQ7BI2QVVNsZZO6f0N0/V9eEKurpuINkRYC/GyWrWr/yGFAjk6tMsSQrDlWLB6Mm/FH/0uNyg==
+  dependencies:
+    "@nextui-org/react-utils" "2.0.13"
+    "@nextui-org/shared-utils" "2.0.5"
+
 "@nextui-org/snippet@^2.0.35":
   version "2.0.35"
   resolved "https://registry.yarnpkg.com/@nextui-org/snippet/-/snippet-2.0.35.tgz#a56ec13502e144139107d95a0bf630833472c0e1"

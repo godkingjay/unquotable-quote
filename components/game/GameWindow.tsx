@@ -6,11 +6,13 @@ import toast from "react-hot-toast";
 import useQuotes from "@/hooks/api/useQuotes";
 import { cn, concatenate, formatUpperCase } from "@/lib";
 import { useGameInstanceStore } from "@/lib/zustand";
+import { textStyles } from "@/styles";
 import { GameQuoteFieldCharacterType, GameQuoteFieldWordType } from "@/types";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody } from "@nextui-org/card";
 import { Input } from "@nextui-org/input";
 import { Spinner } from "@nextui-org/spinner";
+import { Skeleton } from "@nextui-org/skeleton";
 
 import { HeartFilledIcon } from "../icons";
 import { GameOverModal } from "../modal";
@@ -22,9 +24,6 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
         const game = useGameInstanceStore();
 
         const decryptButtonRef = React.useRef<HTMLButtonElement>(null);
-
-        const [currentCharacterField, setCurrentCharacterField] =
-            React.useState("");
 
         const [isLoading, setIsLoading] = React.useState(false);
         const { getEncryptedQuoteQuery } = useQuotes({
@@ -199,7 +198,7 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
                     return (
                         <p
                             className={cn(
-                                "inline-flex h-10 items-end pb-1 text-lg text-inherit",
+                                "inline-flex h-10 w-1 items-end pb-1 text-lg text-inherit",
                                 {
                                     "text-center": character.type === "join",
                                 },
@@ -226,10 +225,8 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
                     )}
                     id={`character-${character.index}`}
                     aria-label={`character-${character.letter}-${character.index}`}
-                    className={cn("inline-flex w-6 flex-row", {
-                        "w-1":
-                            character.type === "join" ||
-                            character.type === "symbol",
+                    className={cn("inline-flex w-auto flex-row", {
+                        "w-6": character.type === "letter",
                         "w-5": character.type === "space",
                     })}
                 >
@@ -244,73 +241,151 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
                 id="game-window"
                 className="flex flex-col items-center justify-center gap-4"
             >
-                <div className="flex flex-row flex-wrap items-center justify-center gap-2">
-                    {Array.from({ length: game.maxLife }).map((_, index) => (
-                        <HeartFilledIcon
-                            key={index}
-                            size={32}
-                            className={cn({
-                                "text-red-500": index < game.life,
-                                "text-default-300": index >= game.life,
-                            })}
-                        />
-                    ))}
-                </div>
-
-                <Card
-                    radius="lg"
-                    shadow="none"
-                    className="min-h-14 w-full max-w-3xl border border-divider"
-                >
-                    <CardBody className="flex flex-col gap-2 p-4">
-                        {isLoading || !game.initialized ? (
-                            <>
-                                <Spinner />
-                            </>
-                        ) : (
-                            <>
-                                <div className="inline-flex flex-wrap justify-center text-wrap text-center text-lg">
-                                    {game?.fields.map((field) => (
-                                        <div
-                                            key={String(field.index)}
-                                            id={`word-${field.index}`}
-                                            className="mb-2 inline-flex flex-row gap-2"
-                                        >
-                                            {renderWordField(field)}
-                                        </div>
-                                    ))}
+                <div className="flex w-full flex-row justify-center gap-2">
+                    <div className="flex max-w-3xl flex-1 flex-col gap-4">
+                        <Card
+                            radius="lg"
+                            shadow="none"
+                            className="h-min min-h-14 w-full border border-divider"
+                        >
+                            <CardBody className="flex flex-col gap-4 p-4">
+                                <div className="flex flex-row flex-wrap items-center justify-center gap-2">
+                                    {Array.from({ length: game.maxLife }).map(
+                                        (_, index) => (
+                                            <HeartFilledIcon
+                                                key={index}
+                                                size={32}
+                                                className={cn({
+                                                    "text-red-500":
+                                                        index < game.life,
+                                                    "text-default-300":
+                                                        index >= game.life,
+                                                })}
+                                            />
+                                        ),
+                                    )}
                                 </div>
-                                <p className="text-right text-base italic opacity-50">
-                                    - {game.author}
-                                </p>
-                            </>
-                        )}
-                    </CardBody>
-                </Card>
 
-                <div className="mt-4 flex flex-col-reverse flex-wrap items-center justify-center gap-4 sm:flex-row">
-                    <Button
-                        size="lg"
-                        variant="solid"
-                        color="default"
-                        isDisabled={isLoading}
-                        onPress={startNewGame}
-                        className="w-full sm:w-auto"
-                    >
-                        New Game
-                    </Button>
+                                {isLoading || !game.initialized ? (
+                                    <>
+                                        <Spinner />
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="inline-flex flex-wrap justify-center text-wrap text-center text-lg">
+                                            {game?.fields.map((field) => (
+                                                <div
+                                                    key={String(field.index)}
+                                                    id={`word-${field.index}`}
+                                                    className="mb-2 inline-flex flex-row gap-2"
+                                                >
+                                                    {renderWordField(field)}
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <p className="text-right text-base italic opacity-50">
+                                            - {game.author}
+                                        </p>
+                                    </>
+                                )}
 
-                    <Button
-                        ref={decryptButtonRef}
-                        size="lg"
-                        variant="solid"
-                        color="primary"
-                        isDisabled={isLoading}
-                        onPress={game.checkDecryptedText}
-                        className="w-full sm:w-auto"
-                    >
-                        Decrypt
-                    </Button>
+                                <div className="mt-4 flex flex-col-reverse flex-wrap items-center justify-center gap-4 sm:flex-row">
+                                    <Button
+                                        size="lg"
+                                        variant="solid"
+                                        color="default"
+                                        isDisabled={isLoading}
+                                        onPress={startNewGame}
+                                        className="w-full sm:w-auto"
+                                    >
+                                        New Game
+                                    </Button>
+
+                                    <Button
+                                        ref={decryptButtonRef}
+                                        size="lg"
+                                        variant="solid"
+                                        color="primary"
+                                        isDisabled={isLoading}
+                                        onPress={game.checkDecryptedText}
+                                        className="w-full sm:w-auto"
+                                    >
+                                        Decrypt
+                                    </Button>
+                                </div>
+                            </CardBody>
+                        </Card>
+                    </div>
+
+                    <div className="hidden lg:block">
+                        <Card
+                            radius="lg"
+                            shadow="none"
+                            className="h-min border border-divider"
+                        >
+                            <CardBody className="flex flex-col gap-4 p-4">
+                                <h2
+                                    className={cn(
+                                        "text-center font-semibold",
+                                        textStyles({
+                                            size: "md",
+                                        }),
+                                    )}
+                                >
+                                    Inputs
+                                </h2>
+                                <div className="grid gap-2 lg:grid-cols-2 xl:grid-cols-3">
+                                    {isLoading || !game.initialized
+                                        ? Array.from({ length: 9 }).map(
+                                              (_, index) => (
+                                                  <Skeleton
+                                                      key={index}
+                                                      className="h-8 w-20 rounded-md"
+                                                  />
+                                              ),
+                                          )
+                                        : Object.keys(game.inputs)
+                                              .sort()
+                                              .map((key) => (
+                                                  <div
+                                                      key={key}
+                                                      className="flex w-20 flex-row flex-nowrap items-center justify-end"
+                                                  >
+                                                      <p>{key} =&nbsp;</p>
+                                                      <Card
+                                                          key={key}
+                                                          shadow="none"
+                                                          radius="sm"
+                                                          className={cn(
+                                                              "h-8 w-8 border-2 border-divider",
+                                                              {
+                                                                  "text-opacity-50":
+                                                                      game
+                                                                          .inputs[
+                                                                          key
+                                                                      ] === "",
+                                                              },
+                                                          )}
+                                                      >
+                                                          <CardBody className="p-1 text-inherit">
+                                                              <p className="text-center text-sm text-inherit">
+                                                                  {game.inputs[
+                                                                      key
+                                                                  ] === ""
+                                                                      ? "?"
+                                                                      : game
+                                                                            .inputs[
+                                                                            key
+                                                                        ]}
+                                                              </p>
+                                                          </CardBody>
+                                                      </Card>
+                                                  </div>
+                                              ))}
+                                </div>
+                            </CardBody>
+                        </Card>
+                    </div>
                 </div>
 
                 <GameOverModal
