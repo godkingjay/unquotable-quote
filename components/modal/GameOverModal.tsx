@@ -39,7 +39,7 @@ const GameOverModal = forwardRef<ElementRef<typeof Modal>, GameOverModalProps>(
                                 )}
                             >
                                 {game.isSolved && "QUOTE COMPLETED!"}
-                                {game.isLost && "YOU LOST!"}
+                                {game.isLost && "YOU LOSE!"}
                             </h2>
                         </div>
                         <div className="flex flex-col items-center justify-center gap-2">
