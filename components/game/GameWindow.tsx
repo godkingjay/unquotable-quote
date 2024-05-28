@@ -69,12 +69,14 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
                     return (
                         <div
                             key={character.index}
-                            className="flex flex-col items-center justify-center gap-2 text-inherit"
+                            className="flex flex-col items-center justify-center text-inherit"
                         >
                             <Input
                                 id={`character-field-${character.fieldIndex}`}
-                                variant="underlined"
+                                variant="bordered"
+                                radius="sm"
                                 max={1}
+                                color={character.isError ? "danger" : "primary"}
                                 maxLength={1}
                                 isDisabled={character.isCorrect}
                                 isInvalid={character.isError}
@@ -82,7 +84,7 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
                                     "!text-red-500": character.isError,
                                 })}
                                 classNames={{
-                                    input: "text-center text-lg text-inherit -mb-2",
+                                    input: "text-center text-lg text-inherit",
                                     mainWrapper: "!p-0",
                                     innerWrapper: "!p-0",
                                     inputWrapper: "!p-0",
@@ -182,7 +184,7 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
                     key={String(character.index)}
                     id={`character-${character.index}`}
                     aria-label={`character-${character.letter}-${character.index}`}
-                    className={cn("inline-flex w-5 flex-row", {
+                    className={cn("inline-flex w-6 flex-row", {
                         "w-1":
                             character.type === "join" ||
                             character.type === "symbol",
