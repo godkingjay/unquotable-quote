@@ -4,7 +4,7 @@ import React from "react";
 import toast from "react-hot-toast";
 
 import useQuotes from "@/hooks/api/useQuotes";
-import { cn, formatUpperCase } from "@/lib";
+import { cn, concatenate, formatUpperCase } from "@/lib";
 import { useGameInstanceStore } from "@/lib/zustand";
 import { GameQuoteFieldCharacterType, GameQuoteFieldWordType } from "@/types";
 import { Button } from "@nextui-org/button";
@@ -108,10 +108,7 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
             switch (character.type) {
                 case "letter": {
                     return (
-                        <div
-                            key={character.index}
-                            className="flex flex-col items-center justify-center text-inherit"
-                        >
+                        <div className="flex flex-col items-center justify-center text-inherit">
                             <Input
                                 id={`character-field-${character.fieldIndex}`}
                                 variant="bordered"
@@ -128,8 +125,13 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
                                     innerWrapper: "!p-0",
                                     inputWrapper: "!p-0",
                                 }}
+                                data-label={character.letter}
                                 value={character.value}
                                 onChange={(e) => {
+                                    e.target.value = e.target.value
+                                        .toUpperCase()
+                                        .replace(character.value, "");
+
                                     game.setCharacterValue(
                                         character.letter,
                                         formatUpperCase(
@@ -196,7 +198,6 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
                 default: {
                     return (
                         <p
-                            key={character.index}
                             className={cn(
                                 "inline-flex h-10 items-end pb-1 text-lg text-inherit",
                                 {
@@ -214,7 +215,15 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
         const renderWordField = (word: GameQuoteFieldWordType) => {
             return word.characters.map((character) => (
                 <div
-                    key={String(character.index)}
+                    key={String(
+                        concatenate(
+                            "-",
+                            word.index,
+                            word.word,
+                            character.letter,
+                            character.index,
+                        ),
+                    )}
                     id={`character-${character.index}`}
                     aria-label={`character-${character.letter}-${character.index}`}
                     className={cn("inline-flex w-6 flex-row", {
