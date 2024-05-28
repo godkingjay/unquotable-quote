@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 
-import { GameWindow } from '@/components/game';
+import { GameWindow } from "@/components/game";
 
 const Game = () => {
-	return (
-		<section className='pb-16'>
-			<GameWindow />
-		</section>
-	);
+    return (
+        <section className="pb-16">
+            <GameWindow />
+        </section>
+    );
 };
 
 export default Game;
