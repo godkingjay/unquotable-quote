@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            gcTime: 0,
+            gcTime: 1 * 1000,
             refetchOnWindowFocus: false,
         },
     },
