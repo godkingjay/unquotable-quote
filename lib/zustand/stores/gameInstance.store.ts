@@ -11,6 +11,7 @@ type GameInstanceInitOptions = {
 };
 
 type GameInstanceStoreState = EncryptedQuoteType & {
+    initialized: boolean;
     life: number;
     maxLife: number;
     options: GameInstanceInitOptions;
@@ -35,6 +36,7 @@ type GameInstanceStoreActions = {
 };
 
 const defaultGameInstance: GameInstanceStoreState = {
+    initialized: false,
     life: 5,
     maxLife: 5,
     options: {
@@ -59,6 +61,8 @@ export const useGameInstanceStore = create<
 >((set) => ({
     ...defaultGameInstance,
     init: (game, options) => {
+        set({ initialized: false });
+
         const reversedMap = Object.fromEntries(
             Object.entries(game.map).map(([key, value]) => [value, key]),
         );
@@ -138,6 +142,7 @@ export const useGameInstanceStore = create<
 
         set({
             ...defaultGameInstance,
+            initialized: true,
             life: options?.life ?? defaultGameInstance.life,
             maxLife: options?.life ?? defaultGameInstance.maxLife,
             options: options ?? defaultGameInstance.options,

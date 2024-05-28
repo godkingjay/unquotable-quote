@@ -37,11 +37,12 @@ export default function Home() {
                     href="/game"
                     className={cn(
                         buttonStyles({
+                            size: "lg",
                             variant: "solid",
                             radius: "full",
                             color: "primary",
                         }),
-                        "bg-gradient-to-br from-violet-500 to-pink-500",
+                        "bg-gradient-to-br from-violet-500 to-pink-500 font-semibold",
                     )}
                 >
                     START GAME

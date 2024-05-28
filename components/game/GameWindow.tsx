@@ -197,7 +197,7 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
                     className="min-h-14 w-full max-w-3xl border border-divider"
                 >
                     <CardBody className="flex flex-col gap-2 p-4">
-                        {isLoading ? (
+                        {isLoading || !game.initialized ? (
                             <>
                                 <Spinner />
                             </>
