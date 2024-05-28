@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { HeartFilledIcon } from "../icons";
 import { GameOverModal } from "../modal";
+import useQuotes from "@/hooks/api/useQuotes";
 
 type GameWindowProps = {};
 
@@ -23,22 +24,33 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
 
         const decryptButtonRef = React.useRef<HTMLButtonElement>(null);
 
-        const { isLoading, error, refetch } = useQuery({
-            queryKey: ["getQuote"],
-            queryFn: async () => {
-                const response = await API.quotes.GET_Encrypted({});
-
-                game.init(response.data, game.options);
-
-                return response.data;
+        const [isLoading, setIsLoading] = React.useState(false);
+        const { getEncryptedQuoteQuery } = useQuotes({
+            onGetEncryptedQuote(data) {
+                setIsLoading(true);
             },
-            gcTime: 1 * 1000,
-            refetchOnWindowFocus: false,
+            onGetEncryptedQuoteSuccess: (response) => {
+                game.init(response.data, game.options);
+                setIsLoading(false);
+            },
+            onGetEncryptedQuoteError(error) {
+                setIsLoading(false);
+            },
         });
 
-        const startNewGame = React.useCallback(() => {
-            refetch();
-        }, [refetch]);
+        const startNewGame = React.useCallback(async () => {
+            getEncryptedQuoteQuery.mutate({});
+        }, [getEncryptedQuoteQuery]);
+
+        const initialGameMounted = React.useRef(false);
+
+        React.useEffect(() => {
+            if (!initialGameMounted.current) {
+                initialGameMounted.current = true;
+                startNewGame();
+            }
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, []);
 
         const renderCharacterField = (
             character: GameQuoteFieldCharacterType,
