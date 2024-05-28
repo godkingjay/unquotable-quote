@@ -1,7 +1,9 @@
 "use client";
 
 import React from "react";
+import toast from "react-hot-toast";
 
+import useQuotes from "@/hooks/api/useQuotes";
 import { cn, formatUpperCase } from "@/lib";
 import { useGameInstanceStore } from "@/lib/zustand";
 import { GameQuoteFieldCharacterType, GameQuoteFieldWordType } from "@/types";
@@ -12,8 +14,6 @@ import { Spinner } from "@nextui-org/spinner";
 
 import { HeartFilledIcon } from "../icons";
 import { GameOverModal } from "../modal";
-import useQuotes from "@/hooks/api/useQuotes";
-import toast from "react-hot-toast";
 
 type GameWindowProps = {};
 
@@ -22,6 +22,9 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
         const game = useGameInstanceStore();
 
         const decryptButtonRef = React.useRef<HTMLButtonElement>(null);
+
+        const [currentCharacterField, setCurrentCharacterField] =
+            React.useState("");
 
         const [isLoading, setIsLoading] = React.useState(false);
         const { getEncryptedQuoteQuery } = useQuotes({
@@ -57,6 +60,48 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
             // eslint-disable-next-line react-hooks/exhaustive-deps
         }, []);
 
+        const getCurrentCharacterField = (index: number): HTMLInputElement => {
+            return document.getElementById(
+                `character-field-${index}`,
+            ) as HTMLInputElement;
+        };
+
+        const getPreviousCharacterField = (
+            index: number,
+        ): HTMLInputElement | null => {
+            const fieldElement = document.getElementById(
+                `character-field-${index - 1}`,
+            ) as HTMLInputElement;
+
+            const isDisabled = fieldElement?.disabled;
+
+            if (fieldElement && !isDisabled) {
+                return fieldElement;
+            } else if (index > 0) {
+                return getPreviousCharacterField(index - 1);
+            } else {
+                return null;
+            }
+        };
+
+        const getNextCharacterField = (
+            index: number,
+        ): HTMLInputElement | null => {
+            const fieldElement = document.getElementById(
+                `character-field-${index + 1}`,
+            ) as HTMLInputElement;
+
+            const isDisabled = fieldElement?.disabled;
+
+            if (fieldElement && !isDisabled) {
+                return fieldElement;
+            } else if (index < game.fieldsCount - 1) {
+                return getNextCharacterField(index + 1);
+            } else {
+                return null;
+            }
+        };
+
         const renderCharacterField = (
             character: GameQuoteFieldCharacterType,
         ) => {
@@ -71,9 +116,7 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
                                 id={`character-field-${character.fieldIndex}`}
                                 variant="bordered"
                                 radius="sm"
-                                max={1}
                                 color={character.isError ? "danger" : "primary"}
-                                maxLength={1}
                                 isDisabled={character.isCorrect}
                                 isInvalid={character.isError}
                                 className={cn("h-10 w-[120%] text-inherit", {
@@ -89,7 +132,10 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
                                 onChange={(e) => {
                                     game.setCharacterValue(
                                         character.letter,
-                                        formatUpperCase(e.target.value),
+                                        formatUpperCase(
+                                            e.target.value.split("").pop() ||
+                                                "",
+                                        ),
                                     );
                                 }}
                                 onKeyDown={(e) => {
@@ -97,23 +143,22 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
                                         case "Enter": {
                                             decryptButtonRef.current?.click();
                                             const currentCharacter =
-                                                document.getElementById(
-                                                    `character-field-${character.fieldIndex}`,
-                                                ) as HTMLInputElement;
+                                                getCurrentCharacterField(
+                                                    character.fieldIndex,
+                                                );
                                             if (currentCharacter) {
                                                 currentCharacter?.focus();
                                             }
                                             break;
                                         }
+                                        case "Backspace": {
+                                            game.setCharacterValue(
+                                                character.letter,
+                                                "",
+                                            );
+                                            break;
+                                        }
                                         case "ArrowLeft": {
-                                            const getPreviousCharacterField = (
-                                                index: number,
-                                            ): HTMLInputElement => {
-                                                return document.getElementById(
-                                                    `character-field-${index - 1}`,
-                                                ) as HTMLInputElement;
-                                            };
-
                                             const previousCharacter =
                                                 getPreviousCharacterField(
                                                     character.fieldIndex,
@@ -125,14 +170,6 @@ const GameWindow = React.forwardRef<HTMLDivElement, GameWindowProps>(
                                             break;
                                         }
                                         case "ArrowRight": {
-                                            const getNextCharacterField = (
-                                                index: number,
-                                            ): HTMLInputElement => {
-                                                return document.getElementById(
-                                                    `character-field-${index + 1}`,
-                                                ) as HTMLInputElement;
-                                            };
-
                                             const nextCharacter =
                                                 getNextCharacterField(
                                                     character.fieldIndex,
