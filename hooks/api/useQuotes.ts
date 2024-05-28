@@ -1,7 +1,6 @@
 import { API } from "@/lib/api";
 import { APIGetEncryptedQuoteType } from "@/lib/api/quote.api";
 import { useMutation } from "@tanstack/react-query";
-import React from "react";
 
 type useQuotesProps = {
     onGetEncryptedQuote?: (data: APIGetEncryptedQuoteType) => void;

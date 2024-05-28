@@ -1,23 +1,30 @@
-import { axiosClient } from '@/lib/utils';
+import { axiosClient } from "@/lib/utils";
 
 export type APIGetEncryptedQuoteType = {
-	controller?: AbortController;
+    controller?: AbortController;
 };
 
-export const getEncryptedQuote = async ({ controller }: APIGetEncryptedQuoteType) => {
-	try {
-		const url = '/quotes';
+export const getEncryptedQuote = async ({
+    controller,
+}: APIGetEncryptedQuoteType) => {
+    try {
+        const url = `/quotes?dt=${new Date().toISOString()}`;
 
-		const response = await axiosClient.get(url, { signal: controller?.signal });
+        const response = await axiosClient.get(url, {
+            signal: controller?.signal,
+        });
 
-		return response;
-	} catch (error: any) {
-		if (controller?.signal.aborted) {
-			throw new Error('Request aborted');
-		}
+        return response;
+    } catch (error: any) {
+        if (controller?.signal.aborted) {
+            throw new Error("Request aborted");
+        }
 
-		const errorMessage = error?.response?.data?.message || error?.message || 'Getting quotes failed';
+        const errorMessage =
+            error?.response?.data?.message ||
+            error?.message ||
+            "Getting quotes failed";
 
-		throw new Error(errorMessage);
-	}
+        throw new Error(errorMessage);
+    }
 };
